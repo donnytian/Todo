@@ -1,0 +1,7 @@
+﻿1. In Package Manager Console window:
+add-migration SecurityInitial -Context SecurityDbContext
+add-migration TodoInitial -Context TodoDbContext
+
+if you want to remove the migration:
+remove-migration -Context SecurityDbContext
+
