@@ -21,12 +21,29 @@
 }
 
 
+
 @mixin transition($time, $type){
     -webkit-transition: all $time $type;
     -moz-transition: all $time $type;
     -o-transition: all $time $type;
     -ms-transition: all $time $type;
     transition: all $time $type;
+}
+
+@mixin transition-opacity-transform($time, $type) {
+    -webkit-transition: opacity $time $type, transform $time $type;
+    -moz-transition: opacity $time $type, transform $time $type;
+    -o-transition: opacity $time $type, transform $time $type;
+    -ms-transition: opacity $time $type, transform $time $type;
+    transition: opacity $time $type, transform $time $type;
+}
+
+@mixin transition-property($property, $time, $type){
+    -webkit-transition: $property $time $type;
+    -moz-transition: $property $time $type;
+    -o-transition: $property $time $type;
+    -ms-transition: $property $time $type;
+    transition: $property $time $type;
 }
 
 @mixin transform-scale($value){

@@ -341,3 +341,13 @@
     padding-top: 10px;
     z-index: 1029;
 }
+.nav-container{
+    position: relative;
+}
+
+.navbar-dashboard-fixed{
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}

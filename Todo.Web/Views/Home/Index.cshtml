@@ -2,9 +2,14 @@
     ViewData["Title"] = "Home Page";
 }
 
-<app asp-prerender-module="ClientApp/dist/main-server">Loading...</app>
+@*Some libraries such as Chartist and jQuery Perfect Scrollbar does not support server side rendering, so for now let's disable SSR.*@
+@*<app asp-prerender-module="ClientApp/dist/main-server">Loading...</app>*@
 
+<app>Loading...</app>
+
+<!--     JS for JQuery, Bootstrap, Material Design and etc.     -->
 <script src="~/dist/vendor.js" asp-append-version="true"></script>
 @section scripts {
+    <!--     JS for application specific     -->
     <script src="~/dist/main-client.js" asp-append-version="true"></script>
 }

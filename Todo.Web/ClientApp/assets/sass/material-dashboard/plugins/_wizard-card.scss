@@ -128,6 +128,12 @@
         cursor: pointer;
         margin-top: 20px;
 
+        &[disabled]{
+            pointer-events: none;
+            cursor: not-allowed;
+            opacity: .26;
+        }
+
         .icon{
             text-align: center;
             vertical-align: middle;

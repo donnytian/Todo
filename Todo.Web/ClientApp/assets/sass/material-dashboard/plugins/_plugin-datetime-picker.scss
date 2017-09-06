@@ -58,7 +58,8 @@
         }
 
         &.bottom {
-
+            visibility: visible;
+            opacity: 1;
             &:before,
             &:after{
                 right: auto;

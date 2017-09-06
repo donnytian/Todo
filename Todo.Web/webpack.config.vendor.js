@@ -21,6 +21,14 @@ const nonTreeShakableModules = [
     'es6-shim',
     'event-source-polyfill',
     'jquery',
+
+    // Material Design theme
+    './ClientApp/assets/js/core/material.min.js',
+    './ClientApp/assets/js/core/jquery.perfect-scrollbar.min.js',
+    './ClientApp/assets/js/plugins/sweetalert2.min.js',
+    './ClientApp/assets/css/material-dashboard.css',
+    './ClientApp/assets/css/demo.css',
+    'chartist',
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
@@ -29,10 +37,10 @@ module.exports = (env) => {
     const isDevBuild = !(env && env.prod);
     const sharedConfig = {
         stats: { modules: false },
-        resolve: { extensions: [ '.js' ] },
+        resolve: { extensions: ['.js'] },
         module: {
             rules: [
-                { test: /\.(png|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
+                { test: /\.(png|jpg|jpeg|gif|woff|woff2|eot|ttf|svg)(\?|$)/, use: 'url-loader?limit=100000' }
             ]
         },
         output: {
@@ -80,7 +88,7 @@ module.exports = (env) => {
             libraryTarget: 'commonjs2',
         },
         module: {
-            rules: [ { test: /\.css(\?|$)/, use: ['to-string-loader', isDevBuild ? 'css-loader' : 'css-loader?minimize' ] } ]
+            rules: [{ test: /\.css(\?|$)/, use: ['to-string-loader', isDevBuild ? 'css-loader' : 'css-loader?minimize'] }]
         },
         plugins: [
             new webpack.DllPlugin({

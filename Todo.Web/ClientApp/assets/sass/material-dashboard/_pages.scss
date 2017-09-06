@@ -82,7 +82,7 @@
     &[data-image]:after{
         opacity: .8;
     }
-    
+
     > .content,
     > .footer{
         position: relative;
@@ -288,6 +288,7 @@
         position: relative;
         z-index: 3;
         padding-top: 15vh;
+        min-height: calc(100vh - 80px);
     }
 
     .footer{

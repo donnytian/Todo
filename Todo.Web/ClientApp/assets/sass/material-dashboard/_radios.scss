@@ -67,6 +67,12 @@
 
   }
 
+  &.has-error{
+      label{
+          color: $brand-danger;
+      }
+  }
+
   input[type=radio] {
     opacity: 0;
     height: 0;

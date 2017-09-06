@@ -27,8 +27,10 @@ export default createServerRenderer(params => {
                 // Because 'onStable' fires before 'onError', we have to delay slightly before
                 // completing the request in case there's an error to report
                 setImmediate(() => {
+                    var s = state.renderToString();
+                    //s = s.slice(27, s.length - 14).replace('</head><body>', '');
                     resolve({
-                        html: state.renderToString()
+                        html: s
                     });
                     moduleRef.destroy();
                 });

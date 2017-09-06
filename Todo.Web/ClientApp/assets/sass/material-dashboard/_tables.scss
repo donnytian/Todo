@@ -5,6 +5,12 @@
        font-weight: $font-weight-light;
    }
 
+   .tab-pane &{
+        tbody > tr > td:first-child{
+            width: 36px;
+        }
+   }
+
    .radio,
    .checkbox{
        margin-top: -1px;

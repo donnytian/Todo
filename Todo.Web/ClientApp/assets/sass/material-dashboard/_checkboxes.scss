@@ -134,6 +134,12 @@
     background-color: $mdb-text-color-primary;
     transform: rotate(-45deg);
   }
+
+  &.has-error{
+      label{
+          color: $brand-danger;
+      }
+  }
 }
 
 @keyframes checkbox-on {
