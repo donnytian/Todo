@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
-import { NavItem, NavItemType } from '../md/md.module';
+import { NavItem, NavItemType } from '../../components/md/md.module';
 import { LocationStrategy, PlatformLocation, Location } from '@angular/common';
 
-import * as $ from 'jquery';
+declare var $ : any;
 var mda: any = {
    misc: {
        movingTab: '<div class="sidebar-moving-tab"/>',
@@ -29,7 +29,7 @@ export class AdminLayoutComponent implements OnInit {
     public navItems: NavItem[];
     location: Location;
 
-    constructor( @Inject(PLATFORM_ID) private platformId: Object, location: Location) {
+    constructor(@Inject(PLATFORM_ID) private platformId: Object, location: Location) {
         this.location = location;
     }
 

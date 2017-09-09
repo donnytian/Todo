@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -10,47 +11,30 @@ namespace Todo.Web.Security
     /// <summary>
     /// We write this class since Asp.NET Core does not provide built-in support for token validation in cookie
     /// while it does for Bearer token in HTTP header though.
-    /// For now we only decode token and validate.
+    /// For now we only decode token and validate. We encode and sign token in the login/ create token action.
     /// </summary>
     public class JwtSecureDataFormat : ISecureDataFormat<AuthenticationTicket>
     {
-        private readonly string _algorithm;
         private readonly TokenValidationParameters _validationParameters;
+        private readonly JwtValidator _validator;
 
-        public JwtSecureDataFormat(string algorithm, TokenValidationParameters validationParameters)
+        public JwtSecureDataFormat(TokenValidationParameters validationParameters, JwtValidator validator)
         {
-            _algorithm = algorithm;
             _validationParameters = validationParameters;
+            _validator = validator;
         }
 
-        public AuthenticationTicket Unprotect(string protectedText)
-            => Unprotect(protectedText, null);
+        public AuthenticationTicket Unprotect(string protectedText) => Unprotect(protectedText, null);
 
         public AuthenticationTicket Unprotect(string protectedText, string purpose)
         {
-            var handler = new JwtSecurityTokenHandler();
             ClaimsPrincipal principal;
 
             try
             {
-                principal = handler.ValidateToken(protectedText, _validationParameters, out var validToken);
-
-                if (!(validToken is JwtSecurityToken validJwt))
-                {
-                    throw new ArgumentException("Invalid JWT");
-                }
-
-                if (!validJwt.Header.Alg.Equals(_algorithm, StringComparison.Ordinal))
-                {
-                    throw new ArgumentException($"Algorithm must be '{_algorithm}'");
-                }
-
-                // Additional custom validation of JWT claims here (if any)
-
-                // Add additional claims to principal.
-                //validJwt.Claims.First(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value;
+                principal = _validator.ValidateToken(protectedText, _validationParameters, out var validToken);
             }
-            catch (SecurityTokenValidationException)
+            catch (SecurityTokenException)
             {
                 return null;
             }
@@ -60,8 +44,7 @@ namespace Todo.Web.Security
             }
 
             // Validation passed. Return a valid AuthenticationTicket.
-            // Since we use Identity, set authentication schema as Identity's.
-            return new AuthenticationTicket(principal, new AuthenticationProperties(), IdentityConstants.ApplicationScheme);
+            return new AuthenticationTicket(principal, new AuthenticationProperties(), JwtBearerDefaults.AuthenticationScheme);
         }
 
         // This ISecureDataFormat implementation is decode-only

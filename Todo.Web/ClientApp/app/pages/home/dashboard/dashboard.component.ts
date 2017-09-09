@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import '../../../../assets/js/plugins/jquery-jvectormap.js';
-import { TableData } from '../../../layouts/md/md-table/md-table.component';
+import { TableData } from '../../../components/md/md-table/md-table.component';
 import * as Chartist from 'chartist';
 
 declare var $: any;

@@ -11,7 +11,6 @@ using Todo.Web.Security;
 
 namespace Todo.Web.Controllers
 {
-    [JwtAuthorize]
     [Route("api/[controller]")]
     public class SampleDataController : TodoControllerBase
     {

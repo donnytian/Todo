@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using Todo.Application;
 using Todo.Common.Adapter;
 using Todo.Common.Logging;
+using Todo.Common.Security;
 using Todo.Core;
 using Todo.Mongo;
 using Todo.Mongo.Repositories;
@@ -46,18 +47,26 @@ namespace Todo.Web
 
             //
             // Security.
+            //
             // We use token (JWT) based authentication here.
             // For a better understanding regarding token authentication, see below page.
             // https://stormpath.com/blog/token-authentication-asp-net-core
             //
+
+            // Turn off Microsoft's JWT handler that maps claim types to .NET's long claim type names
+            // See more details at https://github.com/IdentityServer/IdentityServer3.Samples/issues/173
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
             var jwtOptions = config.GetSection("JwtSecurityToken").Get<JwtOptions>();
+            var invalidTokenDictionary = new InvalidTokenDictionary();
+            var jwtValidator = new JwtValidator(jwtOptions.SigningAlgorithm, invalidTokenDictionary);
             var tokenValidationParameters = new TokenValidationParameters
             {
                 // Check if the token is issued by us.
                 ValidIssuer = jwtOptions.Issuer,
                 ValidAudience = jwtOptions.Audience,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.SigningKey)),
                 // Check if the token is expired.
                 ValidateLifetime = true,
                 // This defines the maximum allowable clock skew - i.e. provides a tolerance on the token expiry time 
@@ -88,24 +97,39 @@ namespace Todo.Web
             {
                 // Prevents cookies from client script access. So we are safe for XSS attack.
                 options.Cookie.HttpOnly = true;
-                options.Cookie.Name = config["Cookies:AccessTokenName"];
+                options.Cookie.Name = jwtOptions.CookieName;
                 // Tells system how to verify.
-                options.TicketDataFormat = new JwtSecureDataFormat(SecurityAlgorithms.HmacSha256, tokenValidationParameters);
+                options.TicketDataFormat = new JwtSecureDataFormat(tokenValidationParameters, jwtValidator);
             });
 
-
-            // Adds token validation for HTTP Authorization Header.
-            // Use [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)] on controllers/ actions
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            // Adds authentication to validate token.
+            services.AddAuthentication(options =>
+                {
+                    // This will override Identity's scheme, so you can use Authorize attributes to protect data.
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(options =>
                 {
                     options.RequireHttpsMetadata = false; // Todo: remove this line in production.
                     options.SaveToken = true;
                     options.TokenValidationParameters = tokenValidationParameters;
+                    // Since we have custom validation logics so remove the default validator.
+                    options.SecurityTokenValidators.Clear();
+                    options.SecurityTokenValidators.Add(jwtValidator);
                 });
-            // Turn off Microsoft's JWT handler that maps claim types to .NET's long claim type names
-            // See more details at https://github.com/IdentityServer/IdentityServer3.Samples/issues/173
-            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+
+            // Adds token black list, used to revoke or logout.
+            // Todo: need a background worker to clean this list to remove tokens that already expired.
+            services.AddSingleton(invalidTokenDictionary);
+            services.AddSingleton(jwtValidator);
+
+            // Custom Policy-Based Authorization.
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy(AuthorizationPolicies.Admin,
+                    builder => builder.RequireClaim(PermissionClaims.Operator).RequireClaim(PermissionClaims.User));
+            });
 
             //
             // Unit of Work.

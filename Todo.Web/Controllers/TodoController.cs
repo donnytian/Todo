@@ -1,19 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Todo.Application;
 using Todo.Application.Dto;
 using Todo.Common.Logging;
-using Todo.Web.Security;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Todo.Web.Controllers
 {
-    [JwtAuthorize]
     [Route("api/[controller]")]
     public class TodoController : TodoControllerBase
     {

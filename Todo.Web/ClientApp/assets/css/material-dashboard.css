@@ -8862,9 +8862,9 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
   opacity: .8;
 }
 .full-page > .content,
-.full-page > .footer {
-  position: relative;
-  z-index: 4;
+.wrapper-full-page .footer {
+    position: relative;
+    z-index: 4;
 }
 .full-page > .content {
   min-height: calc(100vh - 80px);
@@ -8880,10 +8880,10 @@ fieldset[disabled] .form-group.is-focused .togglebutton label {
   background-size: cover;
   background-position: center center;
 }
-.full-page .footer nav > ul a:not(.btn),
-.full-page .footer,
-.full-page .footer .copyright a {
-  color: #FFFFFF;
+.wrapper-full-page .footer nav > ul a:not(.btn),
+.wrapper-full-page .footer,
+.wrapper-full-page .footer .copyright a {
+    color: #FFFFFF;
 }
 
 .clear-filter:before {

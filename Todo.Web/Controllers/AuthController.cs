@@ -5,6 +5,7 @@ using System.Net;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,18 +25,23 @@ namespace Todo.Web.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly JwtOptions _jwtOptions;
         private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
-        private readonly IConfiguration _configuration;
+        private readonly JwtValidator _jwtValidator;
 
-        public AuthController(UserManager<ApplicationUser> userManager, IPasswordHasher<ApplicationUser> passwordHasher
-            , IConfiguration configuration, ILoggerFactory loggerFactory, IOptions<JwtOptions> jwtOptions)
+        public AuthController(
+            UserManager<ApplicationUser> userManager,
+            IPasswordHasher<ApplicationUser> passwordHasher,
+            ILoggerFactory loggerFactory,
+            IOptions<JwtOptions> jwtOptions,
+            JwtValidator jwtValidator)
             : base(loggerFactory)
         {
             _userManager = userManager;
             _jwtOptions = jwtOptions.Value;
             _passwordHasher = passwordHasher;
-            _configuration = configuration;
+            _jwtValidator = jwtValidator;
         }
 
+        [AllowAnonymous]
         [ValidateModel]
         [HttpPost]
         [Route("register")]
@@ -69,7 +75,7 @@ namespace Todo.Web.Controllers
             }
         }
 
-        [ValidateModel]
+        [AllowAnonymous]
         [HttpPost]
         [Route("token")]
         public async Task<IActionResult> CreateToken([FromBody]LoginViewModel model)
@@ -97,8 +103,8 @@ namespace Todo.Web.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 }.Union(userClaims);
 
-                var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
-                var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
+                var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SigningKey));
+                var signingCredentials = new SigningCredentials(symmetricSecurityKey, _jwtOptions.SigningAlgorithm);
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     issuer: _jwtOptions.Issuer,
@@ -108,19 +114,12 @@ namespace Todo.Web.Controllers
                     signingCredentials: signingCredentials
                 );
 
-                var jwt = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
+                var jwt = _jwtValidator.WriteToken(jwtSecurityToken);
 
-                // For demo purpose, we respond token in both cookie and JSON result(then it can be sent from client in HTTP Authorization Header).
-                // We will show different use cases on different Controllers. You can just use either one of them.
-
-                // Stores token in cookie.
-                Response.Cookies.Append(_configuration["Cookies:AccessTokenName"], jwt, new CookieOptions
+                if (_jwtOptions.UseCookie)
                 {
-                    HttpOnly = true,
-                    //Secure = true, // Enable this in production to ensure cookie only send over HTTPS.
-                    Path = "/",
-                    Expires = DateTimeOffset.Now.AddMinutes(_jwtOptions.ExpireInMinutes),
-                });
+                    SetTokenInCookie(jwt);
+                }
 
                 // Returns token as JSON.
                 return Ok(new
@@ -136,30 +135,28 @@ namespace Todo.Web.Controllers
             }
         }
 
-        [JwtAuthorize] // Authentication required since we don't validate token during renew.
+        // Authentication by filter required since we don't validate token in the method.
         [HttpPost]
         [Route("renew")]
         public IActionResult RenewToken()
         {
             try
             {
-                // Gets token from HTTP Authorization header.
-                var protectedText = Request.Headers.First(h => h.Key == "Authorization").Value.First().Split(" ")[1];
-                var handler = new JwtSecurityTokenHandler();
-                var token = handler.ReadJwtToken(protectedText);
+                var protectedText = GetTokenFromRequest();
 
-                // Create a new token based on old token and extend the expiration.
-                var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
-                var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
-                var newToken = new JwtSecurityToken(
-                    issuer: _jwtOptions.Issuer,
-                    audience: _jwtOptions.Audience,
-                    claims: token.Claims,
-                    expires: DateTime.Now.AddMinutes(_jwtOptions.ExpireInMinutes),
-                    signingCredentials: signingCredentials
-                );
+                if (string.IsNullOrEmpty(protectedText))
+                {
+                    return Unauthorized();
+                }
 
-                var jwt = new JwtSecurityTokenHandler().WriteToken(newToken);
+                var newToken = _jwtValidator.RenewToken(protectedText, _jwtOptions);
+
+                var jwt = _jwtValidator.WriteToken(newToken);
+
+                if (_jwtOptions.UseCookie)
+                {
+                    SetTokenInCookie(jwt);
+                }
 
                 return Ok(new
                 {
@@ -173,5 +170,63 @@ namespace Todo.Web.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, "error while renew token");
             }
         }
+
+        // Authentication by filter required since we don't validate token in the method.
+        [HttpPost]
+        [Route("revoke")]
+        public IActionResult RevokeToken()
+        {
+            try
+            {
+                var protectedText = GetTokenFromRequest();
+
+                if (string.IsNullOrEmpty(protectedText))
+                {
+                    return Unauthorized();
+                }
+
+                _jwtValidator.RevokeToken(protectedText);
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"error while revoke token: {ex}");
+                return StatusCode((int)HttpStatusCode.InternalServerError, "error while revoke token");
+            }
+        }
+
+        #region Private Methods
+
+        private void SetTokenInCookie(string token)
+        {
+            Response.Cookies.Append(_jwtOptions.CookieName, token, new CookieOptions
+            {
+                HttpOnly = true,
+                //Secure = true, // Todo: Enable this in production to ensure cookie only send over HTTPS.
+                Path = "/",
+                Expires = DateTimeOffset.Now.AddMinutes(_jwtOptions.ExpireInMinutes),
+            });
+        }
+
+        private string GetTokenFromRequest()
+        {
+            string token;
+
+            if (_jwtOptions.UseCookie)
+            {
+                Request.Cookies.TryGetValue(_jwtOptions.CookieName, out token);
+            }
+            else
+            {
+                Request.Headers.TryGetValue("Authorization", out var stringValues);
+                var array = stringValues.FirstOrDefault()?.Split(" ");
+                token = array?.Length == 1 ? array[1] : null;
+            }
+
+            return token;
+        }
+
+        #endregion
     }
 }

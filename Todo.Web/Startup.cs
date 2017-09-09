@@ -1,10 +1,15 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using Microsoft.AspNetCore.Mvc.ViewFeatures.Internal;
 using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Todo.Common.Logging;
+using Todo.Web.Security;
 using MsILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
 
 namespace Todo.Web
@@ -28,7 +33,18 @@ namespace Todo.Web
         public void ConfigureServices(IServiceCollection services)
         {
             _logger.Info("Start configure services.");
-            services.AddMvc();
+
+            var jwtOptions = Configuration.GetSection("JwtSecurityToken").Get<JwtOptions>();
+            services.AddMvc(options =>
+            {
+                // Adds global filters.
+                options.Filters.Add(new AuthorizeFilter(string.Empty));
+
+                if (jwtOptions.UseCookie)
+                {
+                    options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+                }
+            });
 
             // Adds application specific services.
             services.AddTodoServices(Configuration);

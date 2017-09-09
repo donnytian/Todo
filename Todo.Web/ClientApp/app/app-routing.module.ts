@@ -1,57 +1,32 @@
 ﻿import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
-import { AdminLayoutComponent } from './layouts/admin/admin-layout.component';
-import { AuthLayoutComponent } from './layouts/auth/auth-layout.component';
+import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
-  {
-    path: '', redirectTo: 'dashboard', pathMatch: 'full',
-  },
-  {
-    path: '', component: AdminLayoutComponent,
-    children: [
-      {
-        path: '', loadChildren: './pages/home/dashboard/dashboard.module#DashboardModule'
-      },
-      //{
-      //  path: 'components', loadChildren: './components/components.module#ComponentsModule'
-      //},
-      //{
-      //  path: 'forms', loadChildren: './forms/forms.module#Forms'
-      //},
-      //{
-      //  path: 'tables', loadChildren: './tables/tables.module#TablesModule'
-      //},
-      //{
-      //  path: 'maps', loadChildren: './maps/maps.module#MapsModule'
-      //},
-      //{
-      //  path: 'widgets', loadChildren: './widgets/widgets.module#WidgetsModule'
-      //},
-      //{
-      //  path: 'charts', loadChildren: './charts/charts.module#ChartsModule'
-      //},
-      //{
-      //  path: 'calendar', loadChildren: './calendar/calendar.module#CalendarModule'
-      //},
-      //{
-      //  path: '', loadChildren: './userpage/user.module#UserModule'
-      //},
-      //{
-      //  path: '', loadChildren: './timeline/timeline.module#TimelineModule'
-      //}
-    ]
-  },
-  //{
-  //  path: '', component: AuthLayoutComponent,
-  //  children: [{path: 'pages', loadChildren: '../pages/pages.module#PagesModule'}]
-  //}
+    {
+        path: '', redirectTo: 'home', pathMatch: 'full',
+    },
+    {
+        path: 'home',
+        loadChildren: "./pages/home/home.module#HomeModule",
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'login',
+        loadChildren: "./pages/login/login.module#LoginModule"
+    },
+    {
+        path: 'register',
+        loadChildren: "./pages/register/register.module#RegisterModule"
+    },
 ];
 
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+    imports: [
+        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    ],
+    exports: [RouterModule]
 })
 export class AppRoutingModule { }

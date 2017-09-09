@@ -36,14 +36,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\app\pipes\" />
-    <Folder Include="ClientApp\app\services\" />
     <Folder Include="logs\" />
     <Folder Include="data\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <TypeScriptCompile Include="ClientApp\app\app-routing.module.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">
