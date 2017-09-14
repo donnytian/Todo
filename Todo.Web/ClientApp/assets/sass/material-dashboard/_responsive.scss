@@ -75,6 +75,7 @@
         &.nav-open{
             .main-panel,
             .wrapper-full-page,
+            .wrapper .main-panel,
             .navbar-fixed > div{
                 @include transform-translate-x(260px);
             }
@@ -82,6 +83,12 @@
             .sidebar,
             .off-canvas-sidebar{
                 @include transform-translate-x(0px);
+            }
+
+            #bodyClick{
+                right: 0;
+                left: auto;
+                width: calc(100% - 260px);
             }
         }
 
@@ -226,11 +233,12 @@
 
 
     .sidebar,
-    .off-canvas-sidebar{
+    .off-canvas-menu .navbar-collapse{
         position: fixed;
         display: block;
         top: 0;
-        height: 100vh;
+        height: 100% !important;
+        max-height: none;
         width: 260px;
         right: 0;
         left: auto;
@@ -241,7 +249,7 @@
         border-top: none;
         text-align: left;
         padding-right: 0px;
-        padding-left: 0;
+        padding-left: 0px;
 
         @include transform-translate-x(260px);
         @include transition (0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1));
@@ -287,6 +295,21 @@
         }
     }
 
+    .navbar-collapse .navbar-nav{
+        float: none !important;
+    }
+
+    .bootstrap-collapse{
+        .navbar-collapse{
+            box-shadow: none;
+        }
+
+        .container{
+            padding-right: 0;
+            padding-left: 0;
+        }
+    }
+
     .form-group{
 
         &.form-search{
@@ -314,17 +337,6 @@
             @include transform-translate-x(-260px);
         }
 
-        .navbar .container{
-            @include transform-translate-x(0px);
-        }
-    }
-
-
-
-    .nav-open.off-canvas-menu{
-        .navbar .container{
-            @include transform-translate-x(0px);
-        }
     }
 
     .nav-open .sidebar{
@@ -433,6 +445,7 @@
 
     .navbar-nav {
         margin: 1px 0;
+        margin-top: 15px;
 
         .open .dropdown-menu > li {
             & > a{
@@ -450,29 +463,6 @@
     }
 
     [class*="navbar-"] .navbar-nav {
-        // & > li > a,
-        // > li > a:hover,
-        // > li > a:focus,
-        // .active > a,
-        // .active > a:hover,
-        // .active > a:focus,
-        // .open .dropdown-menu > li > a,
-        // .open .dropdown-menu > li > a:hover,
-        // .open .dropdown-menu > li > a:focus,
-        // .navbar-nav .open .dropdown-menu > li > a:active {
-        //     color: white;
-        // }
-        //
-        // & > li > a,
-        // > li > a:hover,
-        // > li > a:focus,
-        // .open .dropdown-menu > li > a,
-        // .open .dropdown-menu > li > a:hover,
-        // .open .dropdown-menu > li > a:focus{
-        //     opacity: .7;
-        //     background: transparent;
-        // }
-
         &.navbar-nav .open .dropdown-menu > li > a:active {
             opacity: 1;
         }
@@ -604,50 +594,6 @@
             color: #a9afbb;
         }
 
-
-        .navbar-collapse{
-            position: fixed;
-            display: block;
-            top: -15px;
-            height: 100vh;
-            width: 260px;
-            right: 0;
-            z-index: 1032;
-            visibility: visible;
-            background-color: #999;
-            overflow-y: visible;
-            border-top: none;
-            margin: 0;
-            text-align: left;
-
-            max-height: none !important;
-
-            @include transform-translate-x(260px);
-            @include transition (0.33s, cubic-bezier(0.685, 0.0473, 0.346, 1));
-
-            ul {
-                position: relative;
-                z-index: 3;
-                overflow-y: auto;
-                height: 100%;
-            }
-
-            &::after{
-                top: 0;
-                left: 0;
-                height: 100%;
-                width: 100%;
-                position: absolute;
-                background-color: #282828;
-                display: block;
-                content: "";
-                z-index: 1;
-            }
-            &.has-image::after{
-
-            }
-        }
-
         .navbar-header{
             float:none;
         }
@@ -655,16 +601,16 @@
         .navbar-header .collapse, .navbar-toggle {
             display:block !important;
         }
-    }
 
-    .nav-open.off-canvas-menu{
-        .wrapper-full-page,
-        .navbar .container{
-            left: 0;
+        &.nav-open .wrapper-full-page {
             @include transform-translate-x(-260px);
         }
-    }
 
+        .navbar-collapse{
+            padding-right: 15px;
+            padding-left: 15px;
+        }
+    }
 
     .navbar-nav > li{
         float: none;
@@ -715,5 +661,14 @@
 @media all and (max-width: 490px){
     .nav-center .nav-pills-icons{
         max-width: 211px;
+    }
+}
+@media screen and (min-width: 768px) and (max-width: 992px) {
+    .bootstrap-collapse .navbar-collapse.collapse{
+        display: none !important;
+
+        &.in{
+            display: block !important;
+        }
     }
 }

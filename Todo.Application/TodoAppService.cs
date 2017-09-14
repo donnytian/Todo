@@ -63,6 +63,7 @@ namespace Todo.Application
         public async Task<List<TodoItemDto>> FindAllAsync()
         {
             var list = await Repository.GetAllAsync();
+            list.Reverse();
 
             return list.AdaptAsList<TodoItem, TodoItemDto>();
         }

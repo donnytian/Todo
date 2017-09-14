@@ -1,7 +1,11 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Text;
+using System.Threading.Tasks;
 using AspNet.Identity.MongoDb;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -100,14 +104,33 @@ namespace Todo.Web
                 options.Cookie.Name = jwtOptions.CookieName;
                 // Tells system how to verify.
                 options.TicketDataFormat = new JwtSecureDataFormat(tokenValidationParameters, jwtValidator);
+                // Stops redirections for api.
+                options.Events = new CookieAuthenticationEvents
+                {
+                    OnRedirectToAccessDenied = ReplaceRedirector(HttpStatusCode.Forbidden, options.Events.OnRedirectToAccessDenied),
+                    OnRedirectToLogin = ReplaceRedirector(HttpStatusCode.Unauthorized, options.Events.OnRedirectToLogin),
+                };
             });
+
+            Func<RedirectContext<CookieAuthenticationOptions>, Task> ReplaceRedirector(
+                HttpStatusCode statusCode,
+                Func<RedirectContext<CookieAuthenticationOptions>, Task> existingRedirector) =>
+                context =>
+                {
+                    // Does not touch non-api calls.
+                    if (!context.Request.Path.StartsWithSegments("/api")) return existingRedirector(context);
+
+                    // No direction and directly return code.
+                    context.Response.StatusCode = (int)statusCode;
+                    return Task.CompletedTask;
+                };
 
             // Adds authentication to validate token.
             services.AddAuthentication(options =>
                 {
                     // This will override Identity's scheme, so you can use Authorize attributes to protect data.
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    //options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 })
                 .AddJwtBearer(options =>
                 {

@@ -3,8 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppModuleShared } from './app.module.shared';
 import { AppComponent } from './app.component';
-import { AuthGuard } from './guards/auth.guard';
-import { AuthService } from './services/auth.service';
+
 
 @NgModule({
     bootstrap: [AppComponent],
@@ -14,8 +13,6 @@ import { AuthService } from './services/auth.service';
     ],
     providers: [
         { provide: 'BASE_URL', useFactory: getBaseUrl },
-        AuthGuard,
-        AuthService
     ]
 })
 export class AppModule {

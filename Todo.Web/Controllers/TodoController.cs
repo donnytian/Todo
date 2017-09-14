@@ -52,7 +52,7 @@ namespace Todo.Web.Controllers
         {
             try
             {
-                await _appService.UpdateOrInsertItemAsync(item);
+                item = await _appService.UpdateOrInsertItemAsync(item);
             }
             catch (Exception e)
             {
@@ -60,7 +60,7 @@ namespace Todo.Web.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, "error while creating or updating item");
             }
 
-            return Ok();
+            return Ok(item);
         }
 
         // DELETE api/values/5

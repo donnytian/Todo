@@ -337,17 +337,24 @@
     background: linear-gradient(60deg, $color1 , $color2); /* Standard syntax */
 }
 
-// @mixin sidebar-mini-li-active-color($color) {
-//     .nav{
-//         li{
-//             &.active > [data-toggle="collapse"]{
-//                 background-color: $color;
-//                 @include shadow-big-color($color);
-//             }
-//         }
-//     }
-// }
+@mixin sidebar-mini-li-active-color($color) {
+    .nav{
+        li{
+            &.active > [data-toggle="collapse"]{
+                background-color: $color;
+                @include shadow-big-color($color);
+            }
+        }
+    }
+}
 
+@mixin set-background-color-button ($color){
+
+    li.active > a{
+        background-color: $color;
+        @include shadow-big-color($color);
+    }
+}
 
 // Mixins for buttons
 

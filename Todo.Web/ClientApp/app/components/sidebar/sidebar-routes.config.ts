@@ -1,44 +1,57 @@
 import { RouteInfo } from './sidebar.metadata';
 
 export const ROUTES: RouteInfo[] = [
-    { path: '/dashboard', title: 'Dashboard', icon: 'material-icons' },
+    { id: 'todo', path: '/home/todo', title: 'To-Do', miniTitle: '', icon: 'playlist_add_check' },
+    { id: 'dashboard', path: '/home/dashboard', title: 'Dashboard', miniTitle: '', icon: 'dashboard' },
 
-    { path: '/pages/timeline', title: 'Timeline Page', icon:'material-icons' },
-    { path: '/pages/user', title: 'User Page', icon:'material-icons' },
+    {
+        id: 'components', path: '', title: 'Components', miniTitle: '', icon: 'apps', children: [
+            { id: 'components_buttons', path: '/components/buttons', title: 'Buttons', miniTitle: 'B', icon: '' },
+            { id: 'components_grid', path: '/components/grid', title: 'Grid System', miniTitle: 'GS', icon: '' },
+            { id: 'components_panels', path: '/components/panels', title: 'Panels', miniTitle: 'P', icon: '' },
+            { id: 'components_sweet_alert', path: '/components/sweet-alert', title: 'Sweet Alert', miniTitle: 'SA', icon: '' },
+            { id: 'components_notifications', path: '/components/notifications', title: 'Notifications', miniTitle: 'N', icon: '' },
+            { id: 'components_icons', path: '/components/icons', title: 'Icons', miniTitle: 'I', icon: '' },
+            { id: 'components_typography', path: '/components/typography', title: 'Typography', miniTitle: 'T', icon: '' },
+        ]
+    },
 
-    { path: '/components/buttons', title: 'Buttons', icon:'pe-7s-plugin' },
-    { path: '/components/grid', title: 'Grid System', icon:'pe-7s-plugin' },
-    { path: '/components/panels', title: 'Panels', icon:'pe-7s-plugin' },
-    { path: '/components/sweet-alert', title: 'Sweet Alert', icon:'pe-7s-plugin' },
-    { path: '/components/notifications', title: 'Notifications', icon:'pe-7s-plugin' },
-    { path: '/components/icons', title: 'Icons', icon:'pe-7s-plugin' },
-    { path: '/components/typography', title: 'Typography', icon:'pe-7s-plugin' },
+    {
+        id: 'forms', path: '', title: 'Forms', miniTitle: '', icon: 'content_paste', children: [
+            { id: 'forms_regular', path: '/forms/regular', title: 'Regular Forms', miniTitle: 'RF', icon: '' },
+            { id: 'forms_extended', path: '/forms/extended', title: 'Extended Forms', miniTitle: 'EF', icon: '' },
+            { id: 'forms_validation', path: '/forms/validation', title: 'Validation Forms', miniTitle: 'VF', icon: '' },
+            { id: 'forms_wizard', path: '/forms/wizard', title: 'Wizard', miniTitle: 'W', icon: '' },
+        ]
+    },
 
-    { path: '/forms/regular', title: 'Regular Forms', icon:'pe-7s-note2' },
-    { path: '/forms/extended', title: 'Extended Forms', icon:'pe-7s-note2' },
-    { path: '/forms/validation', title: 'Validation Forms', icon:'pe-7s-note2' },
-    { path: '/forms/wizard', title: 'Wizard', icon:'pe-7s-note2' },
+    {
+        id: 'tables', path: '', title: 'Tables', miniTitle: '', icon: 'grid_on', children: [
+            { id: 'tables_regular', path: '/tables/regular', title: 'Regular Tables', miniTitle: 'RT', icon: '' },
+            { id: 'tables_extended', path: '/tables/extended', title: 'Extended Tables', miniTitle: 'ET', icon: '' },
+            { id: 'tables_datatables_net', path: '/tables/datatables.net', title: 'DataTables.net', miniTitle: 'DT', icon: '' },
+        ]
+    },
 
-    { path: '/tables/regular', title: 'Regular Tables', icon:'pe-7s-news-paper' },
-    { path: '/tables/extended', title: 'Extended Tables', icon:'pe-7s-news-paper' },
-    { path: '/tables/datatables.net', title: 'DataTables.net', icon:'pe-7s-news-paper' },
+    {
+        id: 'maps', path: '', title: 'Maps', miniTitle: '', icon: 'place', children: [
+            { id: 'maps_google', path: '/maps/google', title: 'Google Maps', miniTitle: 'GM', icon: '' },
+            { id: 'maps_full_screen', path: '/maps/fullscreen', title: 'Full Screen Map', miniTitle: 'FSM', icon: '' },
+            { id: 'maps_vector', path: '/maps/vector', title: 'Vector Map', miniTitle: 'VM', icon: '' },
+        ]
+    },
 
-    { path: '/maps/google', title: 'Google Maps', icon:'pe-7s-map-marker' },
-    { path: '/maps/fullscreen', title: 'Full Screen Map', icon:'pe-7s-map-marker' },
-    { path: '/maps/vector', title: 'Vector Map', icon:'pe-7s-map-marker' },
+    { id: 'widgets', path: '/widgets', title: 'Widgets', miniTitle: '', icon: 'widgets' },
 
-    { path: '/widgets', title: 'Widgets', icon:'material-icons' },
+    { id: 'charts', path: '/charts', title: 'Charts', miniTitle: '', icon: 'timeline' },
 
-    { path: '/charts', title: 'Charts', icon:'material-icons' },
+    { id: 'calendar', path: '/calendar', title: 'Calendar', miniTitle: '', icon: 'date_range' },
 
-    { path: '/calendar', title: 'Calendar', icon:'material-icons' },
-
-    { path: '/pages/pricing', title: 'Pricing', icon:'material-icons' },
-    { path: '/pages/login', title: 'Login Page', icon:'material-icons' },
-    { path: '/pages/register', title: 'Register Page', icon:'material-icons' },
-    { path: '/pages/lock', title: 'Lock Screen Page', icon:'material-icons' },
-
-
-
-
+    {
+        id: 'pages', path: '', title: 'Pages', miniTitle: '', icon: 'image', children: [
+            { id: 'pages_pricing', path: '/pages/pricing', title: 'Pricing', miniTitle: 'P', icon: '' },
+            { id: 'pages_timeline', path: '/pages/timeline', title: 'Timeline Page', miniTitle: 'TP', icon: '' },
+            { id: 'pages_user', path: '/pages/user', title: 'User Page', miniTitle: 'UP', icon: '' },
+        ]
+    },
 ];

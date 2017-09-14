@@ -5,12 +5,10 @@ import { AuthGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
     {
-        path: '', redirectTo: 'home', pathMatch: 'full',
-    },
-    {
         path: 'home',
         loadChildren: "./pages/home/home.module#HomeModule",
-        canActivate: [AuthGuard]
+        canActivate: [AuthGuard],
+        canActivateChild: [AuthGuard],
     },
     {
         path: 'login',
@@ -20,12 +18,19 @@ export const routes: Routes = [
         path: 'register',
         loadChildren: "./pages/register/register.module#RegisterModule"
     },
+    {
+        path: '', redirectTo: '/home/dashboard', pathMatch: 'full',
+    },
 ];
 
 
 @NgModule({
     imports: [
-        RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+        RouterModule.forRoot(routes,
+            {
+                preloadingStrategy: PreloadAllModules,
+                enableTracing: false, // <-- debugging purposes only
+            })
     ],
     exports: [RouterModule]
 })

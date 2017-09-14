@@ -5,7 +5,13 @@
 @*Some libraries such as Chartist and jQuery Perfect Scrollbar does not support server side rendering, so for now let's disable SSR.*@
 @*<app asp-prerender-module="ClientApp/dist/main-server">Loading...</app>*@
 
-<app>Loading...</app>
+<app>
+    <div class="loader">
+        <svg class="circular" viewBox="25 25 50 50">
+            <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+        </svg>
+    </div>
+</app>
 
 <!--     JS for JQuery, Bootstrap, Material Design and etc.     -->
 <script src="~/dist/vendor.js" asp-append-version="true"></script>

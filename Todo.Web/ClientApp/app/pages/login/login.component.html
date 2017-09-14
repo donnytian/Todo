@@ -5,7 +5,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-sm-6 col-md-offset-4 col-sm-offset-3">
-                    <form method="#" action="#">
+                    <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
                         <div class="card card-login card-hidden">
                             <div class="card-header text-center" data-background-color="rose">
                                 <h4 class="card-title">Login</h4>
@@ -24,17 +24,30 @@
                             <p class="category text-center">
                                 Or Be Classical
                             </p>
+                            <div style="height: 35px;">
+                                <p class="category text-center" [hidden]="model.message && !loginForm.submitted">
+                                    <small class="text-danger">
+                                        {{model.message}}
+                                    </small>
+                                </p>
+                            </div>
                             <div class="card-content">
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <i class="material-icons">face</i>
                                     </span>
                                     <div class="form-group label-floating">
-                                        <label class="control-label">First Name</label>
-                                        <input type="text" class="form-control">
+                                        <label class="control-label">
+                                            User Name
+                                            <span class="star">*</span>
+                                        </label>
+                                        <input [(ngModel)]="model.userName" required #userName="ngModel" name="username" type="text" class="form-control">
+                                        <small [hidden]="userName.valid || (userName.pristine && !loginForm.submitted)" class="text-danger">
+                                            User Name is required
+                                        </small>
                                     </div>
                                 </div>
-                                <div class="input-group">
+                                <!--<div class="input-group">
                                     <span class="input-group-addon">
                                         <i class="material-icons">email</i>
                                     </span>
@@ -42,19 +55,32 @@
                                         <label class="control-label">Email Address</label>
                                         <input type="email" class="form-control">
                                     </div>
-                                </div>
+                                </div>-->
                                 <div class="input-group">
                                     <span class="input-group-addon">
                                         <i class="material-icons">lock_outline</i>
                                     </span>
                                     <div class="form-group label-floating">
-                                        <label class="control-label">Password</label>
-                                        <input type="password" class="form-control">
+                                        <label class="control-label">
+                                            Password
+                                            <span class="star">*</span>
+                                        </label>
+                                        <input [(ngModel)]="model.password" required #password="ngModel" name="password" type="password" class="form-control">
+                                        <small [hidden]="password.valid || (password.pristine && !loginForm.submitted)" class="text-danger">
+                                            Password is required
+                                        </small>
+                                    </div>
+                                </div>
+                                <div class="input-group">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="rememberMe" [(ngModel)]="model.rememberMe"> Remember me?
+                                        </label>
                                     </div>
                                 </div>
                             </div>
                             <div class="footer text-center">
-                                <button type="submit" class="btn btn-rose btn-simple btn-wd btn-lg">Let's go</button>
+                                <button type="submit" class="btn btn-rose btn-primary btn-round" [disabled]="!loginForm.form.valid">Let's go</button>
                             </div>
                         </div>
                     </form>
@@ -64,7 +90,7 @@
     </div>
 
     <!--Workaround. Images in style='background-image: url(..)' cannot be resolve by html-loader directly,
-    wait below feature to be published.
+    so we set it in css. Awaiting below feature to be published.
     https://github.com/webpack-contrib/html-loader/pull/142
     <div class="full-page-background" style="background-image: url(../../../assets/img/login.jpeg)"></div>
     -->

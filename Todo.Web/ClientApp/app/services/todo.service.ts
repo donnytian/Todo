@@ -7,8 +7,7 @@ import 'rxjs/add/operator/delay';
 
 import { HttpServiceBase } from './http-service.base';
 import { IAuthResult } from '../shared/auth-result.model';
-import { LoginModel } from '../shared/login.model';
-import { RegisterModel } from '../pages/register/register.component';
+import { TodoModel } from '../pages/home/todo/todo.component';
 
 export const accessTokenName = "access_token";
 export const accessTokenExpireName = "access_token_expire";
@@ -16,26 +15,20 @@ export const rememberMeName = "remember_me";
 export const loginPath = "/login";
 export const homePath = "/home/dashboard";
 
-const urlPrefix = "auth/";
+const urlPrefix = "todo/";
 
 @Injectable()
-export class AuthService extends HttpServiceBase {
+export class TodoService extends HttpServiceBase {
     constructor(protected http: HttpClient) {
         super(http);
     }
 
-    redirectUrl: string;
-
-    login(login: LoginModel): Observable<IAuthResult> {
-        return this.http.post<IAuthResult>(urlPrefix + "token", login);
+    getItems(): Observable<TodoModel[]> {
+        return this.http.get<TodoModel[]>(urlPrefix);
     }
 
-    logout(): void {
-        this.forgetMe();
-    }
-
-    register(reg: RegisterModel): Observable<IAuthResult> {
-        return this.http.post<IAuthResult>(urlPrefix + "register", reg);
+    addItem(item: TodoModel): Observable<TodoModel> {
+        return this.http.post<TodoModel>(urlPrefix, item);
     }
 
     isLoggedIn(): boolean {

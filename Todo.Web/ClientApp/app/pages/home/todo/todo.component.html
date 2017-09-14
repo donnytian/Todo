@@ -1,0 +1,74 @@
+﻿<div class="main-content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="card">
+                    <div class="card-content">
+                        <form #todoForm="ngForm" (ngSubmit)="onSubmit(todoForm)" class="form-horizontal">
+                            <div class="row" style="height: 35px;">
+                                <p class="category text-center" [hidden]="model.message && !loginForm.submitted">
+                                    <small class="text-danger">
+                                        {{model.message}}
+                                    </small>
+                                </p>
+                            </div>
+                            <div class="form-group label-floating col-xs-11">
+                                <label class="control-label">
+                                    Add a To-Do item...
+                                </label>
+                                <input [(ngModel)]="model.content" required #content="ngModel" name="content" type="text" class="form-control">
+                            </div>
+                            <div class="col-xs-1">
+                                <button type="submit" class="btn btn-rose btn-primary btn-round btn-just-icon pull-left" [disabled]="!todoForm.form.valid">
+                                    <i class="material-icons">add</i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <div class="card">
+                    <div class="card-content table-responsive table-full-width">
+                        <table class="table">
+                            <tbody>
+                                <tr *ngFor="let row of todoItems">
+                                    <td>
+                                        <div [ngSwitch]="row.completed">
+                                            <div *ngSwitchCase="true">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" [(ngModel)]="row.completed" name="optionsCheckboxes" checked>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div *ngSwitchDefault>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" [(ngModel)]="row.completed" name="optionsCheckboxes">
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td *ngIf="row.completed"><span style="text-decoration: line-through">{{row.content}}</span></td>
+                                    <td *ngIf="!row.completed"><span>{{row.content}}</span></td>
+                                    <td class="td-actions text-right">
+                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-simple btn-xs">
+                                            <i class="material-icons">edit</i>
+                                        </button>
+                                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
+                                            <i class="material-icons">close</i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

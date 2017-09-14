@@ -1,6 +1,8 @@
 import { Component, OnInit, ElementRef, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
+declare var $: any;
+
 @Component({
     selector: 'app',
     templateUrl: './app.component.html',
@@ -14,6 +16,7 @@ export class AppComponent implements OnInit {
             return;
         }
         
+        $.material.init();
         let body = document.getElementsByTagName('body')[0];
         var isWindows = navigator.platform.indexOf('Win') > -1;
         if (isWindows) {
@@ -22,5 +25,8 @@ export class AppComponent implements OnInit {
         } else {
             body.classList.add("perfect-scrollbar-off");
         }
+
+        $.material.init();
+        console.log("init in app component");
     }
 }

@@ -5,12 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { MdModule } from '../../../components/md/md.module';
 
 import { DashboardComponent } from './dashboard.component';
-import { DashboardRoutes } from './dashboard.routing';
+import { dashboardRoutes } from './dashboard.routing';
 
 @NgModule({
     imports: [
         CommonModule,
-        RouterModule.forChild(DashboardRoutes),
+        RouterModule.forChild(dashboardRoutes),
         FormsModule,
         MdModule
     ],

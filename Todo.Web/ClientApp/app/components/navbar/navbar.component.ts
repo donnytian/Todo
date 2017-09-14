@@ -1,10 +1,12 @@
 import { Component, OnInit, Renderer, ViewChild, ElementRef, Directive, PLATFORM_ID, Inject } from '@angular/core';
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { ROUTES } from '../sidebar/sidebar-routes.config';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import { Location, LocationStrategy, PathLocationStrategy } from '@angular/common';
 
-var misc:any ={
+import { AuthService, loginPath } from '../../services/auth.service';
+
+var misc: any = {
     navbar_menu_visible: 0,
     active_collapse: true,
     disabled_collapse_init: 0,
@@ -17,7 +19,7 @@ declare var $: any;
     templateUrl: 'navbar.component.html'
 })
 
-export class NavbarComponent implements OnInit{
+export class NavbarComponent implements OnInit {
     private listTitles: any[];
     location: Location;
     private nativeElement: Node;
@@ -26,13 +28,19 @@ export class NavbarComponent implements OnInit{
 
     @ViewChild("navbar-cmp") button;
 
-    constructor(@Inject(PLATFORM_ID) private platformId: Object, location:Location, private renderer : Renderer, private element : ElementRef) {
+    constructor(
+        @Inject(PLATFORM_ID) private platformId: Object,
+        location: Location,
+        private renderer: Renderer,
+        private element: ElementRef,
+        private auth: AuthService,
+        private router: Router) {
         this.location = location;
         this.nativeElement = element.nativeElement;
         this.sidebarVisible = false;
     }
 
-    ngOnInit(){
+    ngOnInit() {
         this.listTitles = ROUTES.filter(listTitle => listTitle);
 
         if (!isPlatformBrowser(this.platformId)) {
@@ -41,33 +49,33 @@ export class NavbarComponent implements OnInit{
 
         var navbar: HTMLElement = this.element.nativeElement;
         this.toggleButton = navbar.getElementsByClassName('navbar-toggle')[0];
-        if($('body').hasClass('sidebar-mini')){
+        if ($('body').hasClass('sidebar-mini')) {
             misc.sidebar_mini_active = true;
         }
-        $('#minimizeSidebar').click(function(){
+        $('#minimizeSidebar').click(function () {
             var $btn = $(this);
 
-            if(misc.sidebar_mini_active == true){
+            if (misc.sidebar_mini_active == true) {
                 $('body').removeClass('sidebar-mini');
                 misc.sidebar_mini_active = false;
 
-            }else{
-                setTimeout(function(){
+            } else {
+                setTimeout(function () {
                     $('body').addClass('sidebar-mini');
 
                     misc.sidebar_mini_active = true;
-                },300);
+                }, 300);
             }
 
             // we simulate the window Resize so the charts will get updated in realtime.
-            var simulateWindowResize = setInterval(function(){
+            var simulateWindowResize = setInterval(function () {
                 window.dispatchEvent(new Event('resize'));
-            },180);
+            }, 180);
 
             // we stop the simulation of Window Resize after the animations are completed
-            setTimeout(function(){
+            setTimeout(function () {
                 clearInterval(simulateWindowResize);
-            },1000);
+            }, 1000);
         });
     }
 
@@ -75,20 +83,20 @@ export class NavbarComponent implements OnInit{
         if (!isPlatformBrowser(this.platformId)) {
             return false;
         }
-        
-        if($(window).width() < 991){
+
+        if ($(window).width() < 991) {
             return false;
         }
         return true;
     }
-    sidebarToggle(){
+    sidebarToggle() {
         var toggleButton = this.toggleButton;
         var body = document.getElementsByTagName('body')[0];
 
-        if(this.sidebarVisible == false){
-            setTimeout(function(){
+        if (this.sidebarVisible === false) {
+            setTimeout(function () {
                 toggleButton.classList.add('toggled');
-            },500);
+            }, 500);
             body.classList.add('nav-open');
             this.sidebarVisible = true;
         } else {
@@ -98,20 +106,25 @@ export class NavbarComponent implements OnInit{
         }
     }
 
-    getTitle(){
+    getTitle() {
         var titlee = this.location.prepareExternalUrl(this.location.path());
-        if(titlee.charAt(0) === '#'){
-            titlee = titlee.slice( 2 );
+        if (titlee.charAt(0) === '#') {
+            titlee = titlee.slice(2);
         }
-        for(var item = 0; item < this.listTitles.length; item++){
-            if(this.listTitles[item].path === titlee){
+        for (var item = 0; item < this.listTitles.length; item++) {
+            if (this.listTitles[item].path === titlee) {
                 return this.listTitles[item].title;
             }
         }
         return 'Dashboard';
     }
-    getPath(){
+    getPath() {
         // console.log(this.location);
         return this.location.prepareExternalUrl(this.location.path());
+    }
+
+    logout(): void {
+        this.auth.logout();
+        this.router.navigate([loginPath]);
     }
 }

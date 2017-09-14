@@ -3,11 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AuthLayoutComponent } from '../../layouts/auth/auth-layout.component';
 import { LoginComponent } from './login.component';
+
 export const loginRoutes: Routes = [
     {
-        path: '', component: AuthLayoutComponent,
+        path: '', pathMatch: 'full', component: AuthLayoutComponent,
         children: [
-            { path: '', component: LoginComponent }
+            { path: '', pathMatch: 'full', component: LoginComponent }
         ]
     },
 ];

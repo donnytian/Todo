@@ -26,397 +26,195 @@
   border: 0;
 }
 
-
-.bootstrap-datetimepicker-widget {
-    list-style: none;
-
-
-    a{
-        .btn{
-            &:hover{
-                background-color: transparent;
-            }
-        }
+.cdk-overlay-container {
+    position: fixed;
+    z-index: 1031;
+}
+.cdk-overlay-container, .cdk-global-overlay-wrapper {
+    pointer-events: none;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+}
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+    opacity: 0.48;
+}
+.cdk-overlay-backdrop {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1031;
+    pointer-events: auto;
+    -webkit-tap-highlight-color: transparent;
+    transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1);
+    opacity: 0;
+}
+.cdk-overlay-pane {
+    position: absolute;
+    pointer-events: auto;
+    box-sizing: border-box;
+    z-index: 1031;
+}
+.mat-datepicker-content {
+    background-color: white;
+    color: rgba(0, 0, 0, 0.87);
+}
+.cdk-visually-hidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    text-transform: none;
+    width: 1px;
+}
+.mat-calendar {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.mat-calendar-period-button {
+    min-width: 0;
+}
+.mat-calendar-next-button, .mat-calendar-previous-button {
+    position: relative;
+}
+.mat-ripple {
+    overflow: hidden;
+}
+.mat-button, .mat-icon-button {
+    background: transparent;
+}
+.mat-calendar-table-header {
+    color: rgba(0, 0, 0, 0.38);
+}
+.mat-calendar-table-header th {
+    font-size: 11px;
+    font-weight: 400;
+}
+.mat-calendar-body {
+    font-size: 13px;
+}
+.mat-calendar-body-label {
+    color: rgba(0, 0, 0, 0.54);
+}
+.mat-calendar-body-label, .mat-calendar-period-button {
+    font-size: 14px;
+    font-weight: 500;
+}
+.mat-calendar-body-cell-content {
+    color: rgba(0, 0, 0, 0.87);
+    border-color: transparent;
+}
+.mat-calendar-body-today:not(.mat-calendar-body-selected) {
+    border-color: rgba(0, 0, 0, 0.38);
+}
+.mat-calendar-body-selected{
+    &,
+    &:hover{
+        background-color: $bs-datetimepicker-active-bg;
+        color: $bs-datetimepicker-active-color;
+        @include shadow-big-color($brand-primary);
     }
 
-    &.dropdown-menu {
-        padding: 4px;
-        width: 19em;
-
-        &.timepicker-sbs {
-            @media (min-width: $screen-sm-min) {
-                width: 38em;
-            }
-
-            @media (min-width: $screen-md-min) {
-                width: 38em;
-            }
-
-            @media (min-width: $screen-lg-min) {
-                width: 38em;
-            }
-        }
-
-        &.bottom {
-            visibility: visible;
-            opacity: 1;
-            &:before,
-            &:after{
-                right: auto;
-                left: 12px
-            }
-        }
-
-        &.top {
-            margin-top: auto;
-            margin-bottom: -20px;
-
-            &.open{
-                margin-top: auto;
-                margin-bottom: 5px;
-            }
-        }
-
-
-
-        &.pull-right {
-            &:before {
-                left: auto;
-                right: 6px;
-            }
-
-            &:after {
-                left: auto;
-                right: 7px;
-            }
-        }
-    }
-
-    .list-unstyled {
-        margin: 0;
-
-
-    }
-
-    a[data-action] {
-        padding: 0;
-        margin: 0;
-        border-width: 0;
-        background-color: transparent;
-        color: $brand-primary;
-        box-shadow: none;
-
-        &:hover{
-            background-color: transparent;
-
-            span{
-                background-color: $bs-datetimepicker-btn-hover-bg;
-                color: $brand-primary;
-            }
-        }
-    }
-
-    a[data-action]:active {
-        box-shadow: none;
-    }
-
-    .timepicker-hour, .timepicker-minute, .timepicker-second {
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        font-weight: $font-weight-light;
-        font-size: $font-size-h4;
-        margin: 0;
-        border-radius: 50%;
-    }
-
-    button[data-action] {
-        width: 38px;
-        height: 38px;
-        margin-right: 3px;
-        padding: 0;
-
-    }
-
-    .btn[data-action="incrementHours"]::after {
-        @extend .sr-only;
-        content: "Increment Hours";
-    }
-
-    .btn[data-action="incrementMinutes"]::after {
-        @extend .sr-only;
-        content: "Increment Minutes";
-    }
-
-    .btn[data-action="decrementHours"]::after {
-        @extend .sr-only;
-        content: "Decrement Hours";
-    }
-
-    .btn[data-action="decrementMinutes"]::after {
-        @extend .sr-only;
-        content: "Decrement Minutes";
-    }
-
-    .btn[data-action="showHours"]::after {
-        @extend .sr-only;
-        content: "Show Hours";
-    }
-
-    .btn[data-action="showMinutes"]::after {
-        @extend .sr-only;
-        content: "Show Minutes";
-    }
-
-    .btn[data-action="togglePeriod"]::after {
-        @extend .sr-only;
-        content: "Toggle AM/PM";
-    }
-
-    .btn[data-action="clear"]::after {
-        @extend .sr-only;
-        content: "Clear the picker";
-    }
-
-    .btn[data-action="today"]::after {
-        @extend .sr-only;
-        content: "Set the date to today";
-    }
-
-    .picker-switch {
-        text-align: center;
-        border-radius: $bs-datetimepicker-border-radius;
-
-        &::after {
-            @extend .sr-only;
-            content: "Toggle Date and Time Screens";
-        }
-
-        td {
-            padding: 0;
-            margin: 0;
-            height: auto;
-            width: auto;
-            line-height: inherit;
-
-            span {
-                line-height: 2.5;
-                height: 2.5em;
-                width: 100%;
-                border-radius: $bs-datetimepicker-border-radius;
-                margin: 2px 0px !important;
-            }
-        }
-    }
-
-    table {
-        width: 100%;
-        margin: 0;
-
-        &.table-condensed{
-            tr > td{
-                text-align: center;
-            }
-        }
-
-
-        & td > div,
-        & th > div {
-            @extend .animation-transition-fast;
-            text-align: center;
-
-        }
-
-
-        & th {
-            @extend .animation-transition-fast;
-
-            height: 20px;
-            line-height: 20px;
-            width: 20px;
-            font-weight: $font-weight-bold;
-
-            &.picker-switch {
-                width: 145px;
-            }
-
-            &.disabled,
-            &.disabled:hover {
-                background: none;
-                color: $bs-datetimepicker-disabled-color;
-                cursor: not-allowed;
-            }
-
-            &.prev span,
-            &.next span{
-                border-radius: $bs-datetimepicker-border-radius;
-                height: 27px;
-                width: 27px;
-                line-height: 28px;
-                font-size: 12px;
-                border-radius: 50%;
-                text-align: center;
-
-            }
-
-            &.prev::after {
-                @extend .sr-only;
-                content: "Previous Month";
-            }
-
-            &.next::after {
-                @extend .sr-only;
-                content: "Next Month";
-            }
-
-            &.dow{
-                text-align: center;
-                border-bottom: 1px solid $gray-lighter;
-                font-size: $font-size-small;
-                text-transform: uppercase;
-                color: $gray-dark;
-                font-weight: $font-weight-default;
-                padding-bottom: 5px;
-                padding-top: $padding-default-vertical;
-            }
-        }
-
-        & thead tr:first-child th{
-            cursor: pointer;
-
-            &:hover span,
-            &.picker-switch:hover{
-                background: $bs-datetimepicker-btn-hover-bg;
-            }
-        }
-
-        & td{
-
-            > div {
-                border-radius: $bs-datetimepicker-border-radius;
-
-                height: 54px;
-                line-height: 54px;
-                width: 54px;
-                text-align: center;
-            }
-
-            &.cw > div {
-                font-size: .8em;
-                height: 20px;
-                line-height: 20px;
-                color: $bs-datetimepicker-alternate-color;
-            }
-
-            &.day > div {
-                height: 30px;
-                line-height: 30px;
-                width: 30px;
-                text-align: center;
-                padding: 0px;
-                border-radius: 50%;
-            }
-
-            &.minute > div,
-            &.hour > div{
-                border-radius: 50%;
-            }
-
-            &.day:hover > div,
-            &.hour:hover > div,
-            &.minute:hover > div,
-            &.second:hover > div {
-                background: $bs-datetimepicker-btn-hover-bg;
-                cursor: pointer;
-            }
-
-            &.old > div,
-            &.new > div{
-                color: $bs-datetimepicker-alternate-color;
-            }
-
-            &.today > div{
-                position: relative;
-
-                &:before {
-                    content: '';
-                    display: inline-block;
-                    border: 0 0 7px 7px solid transparent;
-                    border-bottom-color: $bs-datetimepicker-active-bg;
-                    border-top-color: $bs-datetimepicker-secondary-border-color-rgba;
-                    position: absolute;
-                    bottom: 4px;
-                    right: 4px;
-                }
-            }
-
-            &.active > div,
-            &.active:hover > div {
-                background-color: $bs-datetimepicker-active-bg;
-                color: $bs-datetimepicker-active-color;
-                @include shadow-big-color($brand-primary);
-            }
-
-            &.active.today:before > div{
-                border-bottom-color: $white-color;
-            }
-
-            &.disabled > div,
-            &.disabled:hover > div {
-                background: none;
-                color: $bs-datetimepicker-disabled-color;
-                cursor: not-allowed;
-            }
-
-            span {
-                @extend .animation-transition-fast;
-
-               display: inline-block;
-                width: 40px;
-                height: 40px;
-                line-height: 40px;
-                margin: 3px 3px;
-                cursor: pointer;
-                border-radius: 50%;
-                text-align: center;
-
-                &:hover {
-                    background: $bs-datetimepicker-btn-hover-bg;
-                }
-
-                &.active {
-                    background-color: $bs-datetimepicker-active-bg;
-                    color: $bs-datetimepicker-active-color;
-                }
-
-                &.old {
-                    color: $bs-datetimepicker-alternate-color;
-                }
-
-                &.disabled,
-                &.disabled:hover {
-                    background: none;
-                    color: $bs-datetimepicker-disabled-color;
-                    cursor: not-allowed;
-                }
-            }
-        }
-    }
-
-    .timepicker-picker,
-    .timepicker-hours,
-    .timepicker-minutes{
-        span{
-            border-radius: 50% !important;
-        }
-    }
-
-    &.usetwentyfour {
-        td.hour {
-            height: 27px;
-            line-height: 27px;
-        }
-    }
+}
+.cdk-global-overlay-wrapper {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    position: absolute;
+    z-index: 1031;
+}
+.cdk-overlay-dark-backdrop {
+    background: rgba(0, 0, 0, 0.6);
+}
+.mat-dialog-container {
+    background: white;
+    border-radius: 2px;
+}
+.mat-dialog-container {
+    background: white;
+    color: rgba(0, 0, 0, 0.87);
+}
+.mat-input-placeholder-wrapper {
+    top: -0.84375em;
+    padding-top: 0.84375em;
+}
+.mat-input-placeholder {
+    color: rgba(0, 0, 0, 0.38);
+}
+.mat-input-placeholder.mat-empty {
+    top: 1.28125em;
+}
+.mat-input-placeholder {
+    top: 1em;
+}
+.mat-input-infix {
+    padding: 0.4375em 0;
+    border-top: 0.84375em solid transparent;
+}
+.mat-input-wrapper {
+    padding-bottom: 1.296875em;
+}
+.mat-input-underline {
+    background-color: rgba(0, 0, 0, 0.12);
+}
+.mat-input-underline {
+    bottom: 1.296875em;
+}
+.mat-input-subscript-wrapper {
+    font-size: 75%;
+    margin-top: 0.60416667em;
+    top: calc(100% - 1.72916667em);
+}
+.mat-input-ripple {
+    background-color: $brand-primary;
+}
+// :focus is applied to the input, but we apply mat-focused to the other elements
+// that need to listen to it.
+.mat-focused .mat-input-placeholder {
+  color: $brand-primary;
+}
+
+.mat-input-element:disabled {
+  color: grey;
+}
+.mat-calendar-body-cell-content,
+.mat-icon-button,
+.mat-button-focus-overlay,
+.mat-button{
+    @extend .animation-transition-fast;
+}
+
+.mat-calendar-body-cell-content:hover{
+    background: $bs-datetimepicker-btn-hover-bg;
+}
+// Applies a floating placeholder above the input itself.
+@mixin _mat-input-placeholder-floating($font-scale, $infix-padding, $infix-margin-top) {
+  transform: translateY(-$infix-margin-top - $infix-padding)
+             scale($font-scale)
+             // We use perspecitve to fix the text blurriness as described here:
+             // http://www.useragentman.com/blog/2014/05/04/fixing-typography-inside-of-2-d-css-transforms/
+             // This results in a small jitter after the label floats on Firefox, which the
+             // translateZ fixes.
+             perspective(100px) translateZ(0.001px);
+  // The tricks above used to smooth out the animation on chrome and firefox actually make things
+  // worse on IE, so we don't include them in the IE version.
+  -ms-transform: translateY(-$infix-margin-top - $infix-padding)
+                 scale($font-scale);
+
+  width: 100% / $font-scale;
+}
+.mat-input-placeholder {
+
+  // Show the placeholder above the input when it's not empty, or focused.
+  &.mat-float:not(.mat-empty), .mat-focused &.mat-float {
+    @include _mat-input-placeholder-floating(0.75,
+        0.75em, 0em);
+  }
 }
 
 .input-group.date {
@@ -434,4 +232,14 @@
 .table-condensed>thead>tr>th{
     padding: 1px;
     text-align: center;
+}
+.datepicker__input[_ngcontent-c4]{
+    border: none !important;
+}
+.datepicker[_ngcontent-c4] {
+    width: 100%
+}
+.datepicker__calendar[_ngcontent-c4]{
+    top: 2.1em !important;
+    left: -45px !important;
 }

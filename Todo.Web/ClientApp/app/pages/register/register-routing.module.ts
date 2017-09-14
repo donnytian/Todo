@@ -2,10 +2,15 @@
 import { Routes, RouterModule } from '@angular/router';
 
 import { AuthLayoutComponent } from '../../layouts/auth/auth-layout.component';
+import { RegisterComponent } from './register.component';
+
 
 export const registerRoutes: Routes = [
     {
-        path: '', component: AuthLayoutComponent
+        path: '', pathMatch: 'full', component: AuthLayoutComponent,
+        children: [
+            { path: '', pathMatch: 'full', component: RegisterComponent }
+        ]
     },
 ];
 

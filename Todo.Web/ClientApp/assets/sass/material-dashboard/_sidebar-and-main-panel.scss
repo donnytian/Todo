@@ -1,62 +1,10 @@
-.sidebar-moving-tab{
-    position: absolute;
-    padding: 10px 15px;
-    top: 0px;
-    left: 0px;
-    border-radius: 3px;
-    color: $white-color;
-    cursor: pointer;
-    margin: 10px 15px;
-    width: 230px;
-    display: none;
-    @include transition-property(transform, 0.6s, cubic-bezier(0.29, 1.35, 0.79, 1));
-
-    &.moving{
-        display: block;
-        overflow: hidden;
-    }
-
-    p{
-        margin: 0;
-        line-height: 30px;
-    }
-
-    i{
-        font-size: 24px;
-        float: left;
-        margin-right: 15px;
-        line-height: 30px;
-        width: 30px;
-        text-align: center;
-        color: $white-color;
-    }
-
-    .sidebar-mini{
-        text-transform: uppercase;
-        width: 30px;
-        text-align: center;
-        letter-spacing: 1px;
-        position: absolute;
-        display: inherit;
-    }
-
-    .sidebar-normal{
-        margin: 0;
-        margin-left: 45px;
-        opacity: 1;
-        white-space: nowrap;
-
-    }
-}
-
 .wrapper{
     position: relative;
     top: 0;
     height: 100vh;
 }
 
-.sidebar,
-.off-canvas-sidebar{
+.sidebar{
     position: absolute;
     top: 0;
     bottom: 0;
@@ -66,6 +14,9 @@
     background: $white-color;
     @include shadow-big();
 
+    &[data-background-color="black"]{
+        background-color: #191919;
+    }
 
     .logo-img{
         width: 42px;
@@ -195,8 +146,8 @@
                 }
             }
 
-            &.active.visible > a,
-            &.active.visible > a i{
+            &.active > a,
+            &.active > a i{
                 color: $white-color;
             }
 
@@ -438,19 +389,19 @@
         opacity: .77;
     }
 }
-
-.off-canvas-sidebar{
-    .nav {
-        > li > a,
-        > li > a:hover{
-            color: $white-color;
-        }
-
-        > li > a:focus{
-            background: rgba(200, 200, 200, 0.2);
-        }
-    }
-}
+//
+// .off-canvas-sidebar{
+//     .nav {
+//         > li > a,
+//         > li > a:hover{
+//             color: $white-color;
+//         }
+//
+//         > li > a:focus{
+//             background: rgba(200, 200, 200, 0.2);
+//         }
+//     }
+// }
 
 
 .main-panel{
@@ -688,4 +639,28 @@
             }
         }
     }
+}
+
+.hide-sidebar{
+    .sidebar{
+        @extend .animation-transition-general;
+
+        @include transform-translate-x(-260px);
+    }
+
+    .main-panel{
+        width: 100%;
+    }
+
+    &.sidebar-mini{
+
+        .sidebar{
+            @extend .animation-transition-general;
+
+            @include transform-translate-x(-80px);
+        }
+    }
+}
+.animation{
+    @extend .animation-transition-general;
 }
