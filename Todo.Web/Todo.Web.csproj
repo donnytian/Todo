@@ -26,6 +26,7 @@
     <None Remove="ClientApp\app\services\todo.service.ts" />
     <None Remove="ClientApp\app\shared\auth-result.model.ts" />
     <None Remove="ClientApp\app\services\interceptors\url-prefix.interceptor.ts" />
+    <None Remove="ClientApp\app\shared\common-types.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +52,7 @@
     <TypeScriptCompile Include="ClientApp\app\shared\auth-result.model.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\interceptors\auth.interceptor.ts" />
     <TypeScriptCompile Include="ClientApp\app\services\interceptors\url-prefix.interceptor.ts" />
+    <TypeScriptCompile Include="ClientApp\app\shared\common-types.ts" />
   </ItemGroup>
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('wwwroot\dist') ">

@@ -10,12 +10,7 @@ module.exports = (env) => {
     const sharedConfig = {
         stats: { modules: false },
         context: __dirname,
-        resolve: {
-            extensions: ['.js', '.ts'],
-            alias: {
-                'assets': './ClientApp/assets'
-            }
-        },
+        resolve: {extensions: ['.js', '.ts']},
         output: {
             filename: '[name].js',
             publicPath: 'dist/' // Webpack dev middleware, if enabled, handles requests for this URL prefix
@@ -29,8 +24,7 @@ module.exports = (env) => {
             ]
         },
         plugins: [
-            new CheckerPlugin(),
-            new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' })
+            new CheckerPlugin()
         ]
     };
 
@@ -40,6 +34,7 @@ module.exports = (env) => {
         entry: { 'main-client': './ClientApp/boot.browser.ts' },
         output: { path: path.join(__dirname, clientBundleOutputDir) },
         plugins: [
+            new webpack.ProvidePlugin({ $: 'jquery', jQuery: 'jquery' }),
             new webpack.DllReferencePlugin({
                 context: __dirname,
                 manifest: require('./wwwroot/dist/vendor-manifest.json')

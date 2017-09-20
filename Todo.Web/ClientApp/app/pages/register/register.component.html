@@ -1,5 +1,5 @@
-<div class="full-page register-page" filter-color="black" data-image>
-    <div class="container">
+<div class="full-page register-page" filter-color="black">
+    <div class="content">
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
                 <div class="card card-signup">
@@ -55,7 +55,7 @@
                                 </button>
                                 <h4> or be classical </h4>
                             </div>-->
-                            <div style="height: 63px;display:table-cell;vertical-align: bottom;">
+                            <div style="height: 63px; display: table-cell; vertical-align: bottom;">
                                 <p class="category text-center" [hidden]="model.message && !registerForm.submitted">
                                     <small class="text-danger">
                                         {{model.message}}
@@ -110,7 +110,6 @@
             </div>
         </div>
     </div>
-
     <!--Workaround. Images in style='background-image: url(..)' cannot be resolve by html-loader directly,
     so we set it in css. Awaiting below feature to be published.
     https://github.com/webpack-contrib/html-loader/pull/142

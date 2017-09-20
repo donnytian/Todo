@@ -15,20 +15,20 @@ const treeShakableModules = [
     'zone.js',
 ];
 const nonTreeShakableModules = [
+    'jquery',
     'bootstrap',
-    'bootstrap/dist/css/bootstrap.css',
     'es6-promise',
     'es6-shim',
     'event-source-polyfill',
-    'jquery',
 
-    // Material Design theme
-    './ClientApp/assets/js/core/material.min.js',
-    './ClientApp/assets/js/core/jquery.perfect-scrollbar.min.js',
-    './ClientApp/assets/js/plugins/sweetalert2.min.js',
+    'bootstrap-material-design',
+    'bootstrap/dist/css/bootstrap.css',
     './ClientApp/assets/css/material-dashboard.css',
     './ClientApp/assets/css/demo.css',
-    'chartist',
+    './ClientApp/assets/js/core/jquery.validate.min.js',
+    './ClientApp/assets/js/core/jquery.perfect-scrollbar.min.js',
+    './ClientApp/assets/js/plugins/sweetalert2.min.js',
+    './ClientApp/assets/js/core/material.min.js',
 ];
 const allModules = treeShakableModules.concat(nonTreeShakableModules);
 
@@ -65,7 +65,14 @@ module.exports = (env) => {
         output: { path: path.join(__dirname, 'wwwroot', 'dist') },
         module: {
             rules: [
-                { test: /\.css(\?|$)/, use: extractCSS.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) }
+                { test: /\.css(\?|$)/, use: extractCSS.extract({ use: isDevBuild ? 'css-loader' : 'css-loader?minimize' }) },
+                {
+                    test: require.resolve('jquery'),
+                    use: [
+                        { loader: 'expose-loader', options: 'jQuery' },
+                        { loader: 'expose-loader', options: '$' }
+                    ]
+                },
             ]
         },
         plugins: [

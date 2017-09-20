@@ -1,14 +1,16 @@
 import 'reflect-metadata';
 import 'zone.js';
+import 'jquery';
 import 'bootstrap';
+import 'bootstrap-material-design';
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module.browser';
 
-import './assets/css/material-dashboard.css';
-import './assets/css/demo.css';
+import './assets/js/core/jquery.validate.min.js';
 import './assets/js/core/material.min.js';
 import './assets/js/core/jquery.perfect-scrollbar.min.js';
+window['swal'] = require('./assets/js/plugins/sweetalert2.min.js');
 
 if (module.hot) {
     module.hot.accept();

@@ -6,9 +6,9 @@
                     <div class="card-content">
                         <form #todoForm="ngForm" (ngSubmit)="onSubmit(todoForm)" class="form-horizontal">
                             <div class="row" style="height: 35px;">
-                                <p class="category text-center" [hidden]="model.message && !loginForm.submitted">
+                                <p class="category text-center" [hidden]="newItem.message && !loginForm.submitted">
                                     <small class="text-danger">
-                                        {{model.message}}
+                                        {{newItem.message}}
                                     </small>
                                 </p>
                             </div>
@@ -16,7 +16,7 @@
                                 <label class="control-label">
                                     Add a To-Do item...
                                 </label>
-                                <input [(ngModel)]="model.content" required #content="ngModel" name="content" type="text" class="form-control">
+                                <input [(ngModel)]="newItem.content" required #content="ngModel" name="content" type="text" class="form-control">
                             </div>
                             <div class="col-xs-1">
                                 <button type="submit" class="btn btn-rose btn-primary btn-round btn-just-icon pull-left" [disabled]="!todoForm.form.valid">
@@ -34,34 +34,36 @@
                     <div class="card-content table-responsive table-full-width">
                         <table class="table">
                             <tbody>
-                                <tr *ngFor="let row of todoItems">
+                                <tr *ngFor="let row of todoItems; trackBy: trackById">
                                     <td>
-                                        <div [ngSwitch]="row.completed">
-                                            <div *ngSwitchCase="true">
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" [(ngModel)]="row.completed" name="optionsCheckboxes" checked>
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div *ngSwitchDefault>
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" [(ngModel)]="row.completed" name="optionsCheckboxes">
-                                                    </label>
-                                                </div>
-                                            </div>
+                                        <div *ngIf="editingItem !== row" class="checkbox">
+                                            <label>
+                                                <input type="checkbox" [(ngModel)]="row.completed" name="optionsCheckboxes" (change)="onToggle(row)">
+                                                <span class="checkbox-material"><span class="check"></span></span>
+                                            </label>
                                         </div>
                                     </td>
-                                    <td *ngIf="row.completed"><span style="text-decoration: line-through">{{row.content}}</span></td>
-                                    <td *ngIf="!row.completed"><span>{{row.content}}</span></td>
+                                    <td>
+                                        <span *ngIf="editingItem !== row" [style.text-decoration-line]="row.completed ? 'line-through' : 'none'">{{row.content}}</span>
+                                        <input type="text" *ngIf="editingItem === row" [(ngModel)]="editingContent" class="form-control" required />
+                                    </td>
                                     <td class="td-actions text-right">
-                                        <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-simple btn-xs">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                        <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs">
-                                            <i class="material-icons">close</i>
-                                        </button>
+                                        <ng-container *ngIf="editingItem === row">
+                                            <button type="button" rel="tooltip" title="Edit" class="btn btn-primary btn-simple btn-xs" (click)="onSave()">
+                                                <i class="material-icons">done</i>
+                                            </button>
+                                            <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs" (click)="onCancel()">
+                                                <i class="material-icons">close</i>
+                                            </button>
+                                        </ng-container>
+                                        <ng-container *ngIf="editingItem !== row">
+                                            <button type="button" rel="tooltip" title="Edit" class="btn btn-primary btn-simple btn-xs" (click)="onEdit(row)">
+                                                <i class="material-icons">edit</i>
+                                            </button>
+                                            <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs" (click)="onRemove(row)">
+                                                <i class="material-icons">delete</i>
+                                            </button>
+                                        </ng-container>
                                     </td>
                                 </tr>
                             </tbody>

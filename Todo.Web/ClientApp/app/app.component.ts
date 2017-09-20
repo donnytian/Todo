@@ -27,6 +27,5 @@ export class AppComponent implements OnInit {
         }
 
         $.material.init();
-        console.log("init in app component");
     }
 }

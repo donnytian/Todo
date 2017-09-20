@@ -14,7 +14,7 @@ export const accessTokenName = "access_token";
 export const accessTokenExpireName = "access_token_expire";
 export const rememberMeName = "remember_me";
 export const loginPath = "/login";
-export const homePath = "/home/dashboard";
+export const homePath = "/home/todo";
 
 const urlPrefix = "auth/";
 
@@ -48,6 +48,13 @@ export class AuthService extends HttpServiceBase {
     }
 
     getAuthorizationHeader(): string {
+        const expire = localStorage.getItem(accessTokenExpireName);
+        const now = new Date();
+
+        if (new Date(expire) <= now) {
+            return null;
+        }
+
         return "Bearer " + localStorage.getItem(accessTokenName);
     }
 

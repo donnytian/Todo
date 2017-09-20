@@ -2,6 +2,7 @@
 import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
 
 import { AuthGuard } from './guards/auth.guard';
+import { homePath } from './services/auth.service';
 
 export const routes: Routes = [
     {
@@ -19,7 +20,7 @@ export const routes: Routes = [
         loadChildren: "./pages/register/register.module#RegisterModule"
     },
     {
-        path: '', redirectTo: '/home/dashboard', pathMatch: 'full',
+        path: '', redirectTo: homePath, pathMatch: 'full',
     },
 ];
 
