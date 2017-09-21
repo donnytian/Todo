@@ -67,6 +67,8 @@ namespace Todo.Web
                 app.UseExceptionHandler("/Home/Error");
             }
 
+            app.UseTodo();
+
             app.UseStaticFiles();
 
             app.UseAuthentication();

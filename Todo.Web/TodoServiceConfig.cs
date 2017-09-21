@@ -7,12 +7,14 @@ using AspNet.Identity.MongoDb;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
 using Todo.Application;
 using Todo.Common.Adapter;
 using Todo.Common.Logging;
@@ -179,7 +181,32 @@ namespace Todo.Web
             //
             services.AddTransient<ITodoAppService, TodoAppService>();
 
+
+            //
+            // API management.
+            //
+
+            // Register the Swagger generator, defining one or more Swagger documents
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Todo API", Version = "v1" });
+            });
+
             return services;
+        }
+
+        public static IApplicationBuilder UseTodo(this IApplicationBuilder app)
+        {
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Todo API V1");
+            });
+
+            return app;
         }
     }
 }
