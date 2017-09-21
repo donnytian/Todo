@@ -32,10 +32,10 @@
             <div class="col-md-10 col-md-offset-1">
                 <div class="card">
                     <div class="card-content table-responsive table-full-width">
-                        <table class="table">
+                        <table class="table table-hover">
                             <tbody>
                                 <tr *ngFor="let row of todoItems; trackBy: trackById">
-                                    <td>
+                                    <td class="col-xs-1">
                                         <div *ngIf="editingItem !== row" class="checkbox">
                                             <label>
                                                 <input type="checkbox" [(ngModel)]="row.completed" name="optionsCheckboxes" (change)="onToggle(row)">
@@ -45,11 +45,14 @@
                                     </td>
                                     <td>
                                         <span *ngIf="editingItem !== row" [style.text-decoration-line]="row.completed ? 'line-through' : 'none'">{{row.content}}</span>
-                                        <input type="text" *ngIf="editingItem === row" [(ngModel)]="editingContent" class="form-control" required />
+                                        <div *ngIf="editingItem === row" class="form-group label-floating is-empty">
+                                            <label class="control-label"></label>
+                                            <input type="text" [(ngModel)]="editingContent" class="form-control" required >
+                                        </div>
                                     </td>
                                     <td class="td-actions text-right">
                                         <ng-container *ngIf="editingItem === row">
-                                            <button type="button" rel="tooltip" title="Edit" class="btn btn-primary btn-simple btn-xs" (click)="onSave()">
+                                            <button type="button" rel="tooltip" title="Edit" class="btn btn-primary btn-simple btn-xs" (click)="onSave()" [disabled]="!editingContent">
                                                 <i class="material-icons">done</i>
                                             </button>
                                             <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-xs" (click)="onCancel()">

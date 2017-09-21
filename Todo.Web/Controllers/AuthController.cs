@@ -105,12 +105,14 @@ namespace Todo.Web.Controllers
 
                 var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SigningKey));
                 var signingCredentials = new SigningCredentials(symmetricSecurityKey, _jwtOptions.SigningAlgorithm);
+                var rememberUser = model.RememberMe == true;
+                var validTo = rememberUser ? DateTime.Now.AddDays(_jwtOptions.RememberMeExpireInDays) : DateTime.Now.AddMinutes(_jwtOptions.ExpireInMinutes);
 
                 var jwtSecurityToken = new JwtSecurityToken(
                     issuer: _jwtOptions.Issuer,
                     audience: _jwtOptions.Audience,
                     claims: claims,
-                    expires: DateTime.Now.AddMinutes(_jwtOptions.ExpireInMinutes),
+                    expires: validTo,
                     signingCredentials: signingCredentials
                 );
 
@@ -125,7 +127,7 @@ namespace Todo.Web.Controllers
                 return Ok(new
                 {
                     token = jwt,
-                    expiration = jwtSecurityToken.ValidTo
+                    expiration = validTo
                 });
             }
             catch (Exception ex)

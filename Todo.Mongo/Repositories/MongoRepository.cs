@@ -119,7 +119,10 @@ namespace Todo.Mongo.Repositories
         /// <inheritdoc />
         public virtual TEntity Update(TEntity entity)
         {
-            return Collection.FindOneAndReplace(Predicate(e => e.Id.Equals(entity.Id)), entity);
+            Collection.FindOneAndReplace(Predicate(e => e.Id.Equals(entity.Id)), entity);
+
+            // Note: Collection.FindOneAndReplace will return the old entity, we need return new entity here.
+            return entity;
         }
 
         /// <inheritdoc />

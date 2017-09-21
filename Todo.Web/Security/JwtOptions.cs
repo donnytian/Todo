@@ -31,7 +31,12 @@ namespace Todo.Web.Security
         /// How many minutes the token will be expired after it has been issued.
         /// </summary>
         public int ExpireInMinutes { get; set; }
-        
+
+        /// <summary>
+        /// When "Remember me" checked, how many days the token will be expired after it has been issued.
+        /// </summary>
+        public int RememberMeExpireInDays { get; set; }
+
         /// <summary>
         /// True to add token in cookie for generation and retrieve token from there for authentication and authorization,
         /// otherwise use HTTP Authorization Header.
