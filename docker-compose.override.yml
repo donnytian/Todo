@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  todo.web:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+    build:
+      dockerfile: DockerfileDev

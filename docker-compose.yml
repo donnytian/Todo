@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  todo.web:
+    image: todo.web
+    build:
+      context: ./Todo.Web
+      dockerfile: Dockerfile
